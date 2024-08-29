@@ -70,7 +70,11 @@ namespace Task1.Generators
             {
                 var fileName = fileBasic + (i + 1) + ".txt";
                 GenerateFile(fileName);
+                Console.SetCursorPosition(0, Console.CursorTop);
+                Console.Write($"{i+1} files were created");
             }
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.Write($"Were created 100 files succesfuly");
         }
 
     }

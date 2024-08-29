@@ -1,10 +1,8 @@
-﻿
+﻿using Task1;
 
-
-
-
-using Task1.Generators;
-
-var generator = new FileGenerator("C:\\Users\\dimon\\OneDrive\\Рабочий стол\\Study");
-
-generator.GenerateFiles();
+var context = new ProgramContext();
+while (true)
+{
+    context.DisplayMenu();
+    context.HandleMenu(out int numberOfOption);
+}
