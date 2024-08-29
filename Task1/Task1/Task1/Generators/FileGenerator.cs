@@ -46,7 +46,7 @@ namespace Task1.Generators
             for (int i = 0; i < 100_000; i++)
             {
                 sb.AppendLine($"" +
-                    $"{DateGenerator.GenerateValue()}||" +
+                    $"{DateGenerator.GenerateValue().ToShortDateString()}||" +
                     $"{EnglishStringGenerator.GenerateValue()}||" +
                     $"{RussianStringGenerator.GenerateValue()}||" +
                     $"{IntegerGenerator.GenerateValue()}||" +
@@ -68,7 +68,7 @@ namespace Task1.Generators
             var fileBasic = "File";
             for (int i = 0; i < 100; i++)
             {
-                var fileName = fileBasic + (i + 1);
+                var fileName = fileBasic + (i + 1) + ".txt";
                 GenerateFile(fileName);
             }
         }
