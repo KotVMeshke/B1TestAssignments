@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task2", "Task2\Task2.csproj", "{706DB068-FE49-4894-8F05-06394A856F5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task2", "Task2\Task2.csproj", "{EEE69511-2320-4723-B47C-559F09C40A61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{706DB068-FE49-4894-8F05-06394A856F5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{706DB068-FE49-4894-8F05-06394A856F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{706DB068-FE49-4894-8F05-06394A856F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{706DB068-FE49-4894-8F05-06394A856F5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEE69511-2320-4723-B47C-559F09C40A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEE69511-2320-4723-B47C-559F09C40A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEE69511-2320-4723-B47C-559F09C40A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEE69511-2320-4723-B47C-559F09C40A61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {151F5BC0-A49F-4D17-A1C3-1A0BCA28E893}
+		SolutionGuid = {0F9C42DF-E0B6-47A0-BD47-5F89A25BC95D}
 	EndGlobalSection
 EndGlobal

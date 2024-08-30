@@ -21,7 +21,7 @@ namespace Task1
                     var text = File.ReadAllText(file);
                     File.AppendAllText(filePath, text);
                     Console.SetCursorPosition(0, Console.CursorTop);
-                    Console.Write($"{++counter} files were procceded");
+                    Console.Write($"{++counter} files were processed");
                 }
             }
             else
@@ -38,7 +38,7 @@ namespace Task1
 
             if (Path.Exists(directory))
             {
-                var filePath = Path.Combine(directory, outputeFile);
+                var filePath = Path.Combine(directory, outputeFile) + ".txt";
                 var dir = Directory.GetFiles(directory);
                 File.Create(outputeFile);
                 int counter = 0;
@@ -52,7 +52,7 @@ namespace Task1
                     numberOfDeletedLines += (numberOfLinesBefore - numberOfLinesAfter);
                     File.AppendAllLines(filePath, lines);
                     Console.SetCursorPosition(0, Console.CursorTop);
-                    Console.Write($"{++counter} files were procceded");
+                    Console.Write($"{++counter} files were processed");
                 }
 
                 if (numberOfDeletedLines > 0) Console.WriteLine($"Were deleted {numberOfDeletedLines}");

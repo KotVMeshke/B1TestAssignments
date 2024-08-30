@@ -68,6 +68,12 @@ namespace Task1
                     break;
 
                 case 3:
+                    Console.Write("Input directory of file: ");
+                    GetUserInput(out path);
+                    if (Directory.Exists(path))
+                        FileImporter.LoadFilesIntoDB(path);
+                    else if (File.Exists(path))
+                        FileImporter.LoadFileIntoDB(path);
                     break;
                 case 4:
                     break;
