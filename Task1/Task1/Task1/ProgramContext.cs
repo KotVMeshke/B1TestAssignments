@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task1.DataBase;
 using Task1.Generators;
 
 namespace Task1
@@ -76,6 +79,28 @@ namespace Task1
                         FileImporter.LoadFileIntoDB(path);
                     break;
                 case 4:
+                    using (var dbContext = new ApplicationDBContext())
+                    {
+                        var sumParam = new SqlParameter
+                        {
+                            ParameterName = "@sum",
+                            SqlDbType = System.Data.SqlDbType.Int,
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+
+                        var medianParam = new SqlParameter
+                        {
+                            ParameterName = "@median",
+                            SqlDbType = System.Data.SqlDbType.Decimal,
+                            Precision = 9,
+                            Scale = 8,
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+
+                        dbContext.Database.ExecuteSqlRaw("[Calculate_Sum_Median] @sum OUTPUT, @median OUTPUT", sumParam, medianParam);
+                        Console.WriteLine($"Sum: {sumParam.Value}");
+                        Console.WriteLine($"Median: {medianParam.Value}");
+                    }
                     break;
                 default:
                     optionNumber = -1;
