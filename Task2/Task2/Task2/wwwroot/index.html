@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление Excel-файлами</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #fileList {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+            .file-item button {
+                margin-left: 10px;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Excel file management</h1>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="excelFile" name="excelFile" accept=".xls">
+        <button type="submit">Upload</button>
+    </form>
+
+    <button id="loadFilesBtn">Files</button>
+    <div id="fileList">
+        <h2>Uploaded files</h2>
+        <div id="files"></div>
+    </div>
+
+    <div id="dataView">
+        <h2>Data</h2>
+        <table id="dataTable">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            let formData = new FormData();
+            let fileInput = document.getElementById('excelFile');
+            formData.append('file', fileInput.files[0]);
+
+            fetch('/excel/files/upload', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json());
+
+        });
+
+        document.getElementById('loadFilesBtn').addEventListener('click', loadFileList);
+
+        function loadFileList() {
+            fetch('excel/files')
+                .then(response => response.json())
+                .then(data => {
+                    const filesDiv = document.getElementById('files');
+                    filesDiv.innerHTML = '';
+                    console.log(data);
+                    const ul = document.createElement('ul');
+                    data.forEach(file => {
+                        const li = document.createElement('li');
+                        li.textContent = `${file.name}`;
+
+                        const button = document.createElement('button');
+                        button.textContent = "Show ID";
+                        button.className = 'file-button';
+                        button.addEventListener('click', () => alert(`File ID: ${file.id}`));
+
+                        li.appendChild(button);
+                        ul.appendChild(li);
+                    });
+                    filesDiv.appendChild(ul);
+                });
+        }
+
+        function viewFileData(fileId) {
+            fetch(`/excel/files/${fileId}`)
+                .then(response => response.json())
+                .then(data => {
+                   
+                });
+        }
+
+        loadFileList();
+    </script>
+
+</body>
+</html>
