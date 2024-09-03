@@ -56,6 +56,8 @@ namespace Task1.Generators
                 // Throw an exception if the directory already exists
                 throw new ArgumentException($"Directory {newDirectoryName} already exists");
             }
+            // Set the full path for the directory where files will be generated
+            _fullPath = Path.Combine(_workDirectory, _newDirectoryName);
         }
 
         /// <summary>

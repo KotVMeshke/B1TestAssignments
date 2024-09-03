@@ -53,9 +53,9 @@ namespace Task1
             {
                 case 1:
                     // Handle file generation
-                    Console.Write("Input path where directory will be created: ");
+                    Console.Write("Enter path where directory will be created: ");
                     GetUserInput(out string path);
-                    Console.Write("Input name of created directory (optional): ");
+                    Console.Write("Enter name of created directory (optional): ");
                     FileGenerator fileGenerator;
                     if (!GetUserInput(out string directoryName, true))
                         fileGenerator = new FileGenerator(path);
@@ -68,9 +68,9 @@ namespace Task1
 
                 case 2:
                     // Handle file combination
-                    Console.Write("Input directory to proceed: ");
+                    Console.Write("Enter directory to proceed: ");
                     GetUserInput(out string directory);
-                    Console.Write("Input output file: ");
+                    Console.Write("Enter output file: ");
                     GetUserInput(out string outputFile);
                     Console.Write("Enter combination for deletion (optional): ");
 
@@ -86,7 +86,7 @@ namespace Task1
 
                 case 3:
                     // Handle exporting files to the database
-                    Console.Write("Input directory of file: ");
+                    Console.Write("Enter directory of file: ");
                     GetUserInput(out path);
                     if (Directory.Exists(path))
                         FileImporter.LoadFilesIntoDB(path);
