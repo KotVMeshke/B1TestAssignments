@@ -10,37 +10,49 @@ using Task1.Generators;
 
 namespace Task1
 {
+    /// <summary>
+    /// The ProgramContext class encapsulates the main logic for interacting with the user via a console interface.
+    /// It provides a menu for file operations and database interactions, handling user input and executing commands accordingly.
+    /// </summary>
     internal class ProgramContext
     {
+        /// <summary>
+        /// Constructor that sets the input encoding to UTF-16 to support wider character sets in the console input.
+        /// </summary>
         public ProgramContext()
         {
-            Console.InputEncoding = System.Text.Encoding.GetEncoding("utf-16");
+            Console.InputEncoding = Encoding.GetEncoding("utf-16");
         }
+
+        /// <summary>
+        /// Displays the menu of available options to the user.
+        /// </summary>
         public void DisplayMenu()
         {
             Console.WriteLine("Select an option: ");
-
             Console.WriteLine("1) Create 100 files");
             Console.WriteLine("2) Combine files");
             Console.WriteLine("3) Export files into data base");
             Console.WriteLine("4) Calculate median and sum");
-
-
             Console.WriteLine();
         }
 
-        public bool HandleMenu(out int optionNumber)
+        /// <summary>
+        /// Handles the user's menu selection, executing the corresponding operations.
+        /// </summary>
+        /// <returns>Returns true if the menu handling completes successfully, otherwise false.</returns>
+        public bool HandleMenu()
         {
             if (!int.TryParse(Console.ReadLine(), out int option))
             {
                 Console.WriteLine("Invalid input, try again");
-                optionNumber = -1;
                 return false;
             }
-            optionNumber = option;
+
             switch (option)
             {
                 case 1:
+                    // Handle file generation
                     Console.Write("Input path where directory will be created: ");
                     GetUserInput(out string path);
                     Console.Write("Input name of created directory (optional): ");
@@ -53,8 +65,10 @@ namespace Task1
                     fileGenerator.GenerateFiles();
                     Console.WriteLine();
                     break;
+
                 case 2:
-                    Console.Write("Input directory to procced: ");
+                    // Handle file combination
+                    Console.Write("Input directory to proceed: ");
                     GetUserInput(out string directory);
                     Console.Write("Input output file: ");
                     GetUserInput(out string outputFile);
@@ -71,6 +85,7 @@ namespace Task1
                     break;
 
                 case 3:
+                    // Handle exporting files to the database
                     Console.Write("Input directory of file: ");
                     GetUserInput(out path);
                     if (Directory.Exists(path))
@@ -78,9 +93,13 @@ namespace Task1
                     else if (File.Exists(path))
                         FileImporter.LoadFileIntoDB(path);
                     break;
+
                 case 4:
+                    // Handle calculation of sum and median from the database
                     using (var dbContext = new ApplicationDBContext())
                     {
+
+                        // Setting sql's parameters for stored procedure
                         var sumParam = new SqlParameter
                         {
                             ParameterName = "@sum",
@@ -102,16 +121,22 @@ namespace Task1
                         Console.WriteLine($"Median: {medianParam.Value}");
                     }
                     break;
+
                 default:
-                    optionNumber = -1;
-                    Console.WriteLine("Incorrent number of option, try again");
+                    // Handle invalid option input
+                    Console.WriteLine("Incorrect number of options, try again");
                     break;
             }
-
 
             return true;
         }
 
+        /// <summary>
+        /// Handles user input from the console and ensures it meets the required conditions.
+        /// </summary>
+        /// <param name="output">The processed output from the user's input.</param>
+        /// <param name="canBeEmpty">Specifies whether the input can be empty.</param>
+        /// <returns>Returns true if valid input is obtained, otherwise false.</returns>
         private bool GetUserInput(out string output, bool canBeEmpty = false)
         {
             string? input = string.Empty;
@@ -122,6 +147,7 @@ namespace Task1
                 {
                     output = input;
 
+                    // Allow empty input if canBeEmpty is true
                     if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
                     {
                         return false;
@@ -133,13 +159,5 @@ namespace Task1
             output = input;
             return true;
         }
-
-        public void DisplayCombineOptions()
-        {
-            Console.WriteLine("Select a combine option: ");
-            Console.WriteLine("1) Combine with deletion");
-            Console.WriteLine("2) Combine without deletion");
-        }
-
     }
 }

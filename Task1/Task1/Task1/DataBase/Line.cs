@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Task1.DataBase
 {
+    /// <summary>
+    /// This class describes structure of line in file
+    /// </summary>
     internal class Line
     {
         public int Id { get; set; }
