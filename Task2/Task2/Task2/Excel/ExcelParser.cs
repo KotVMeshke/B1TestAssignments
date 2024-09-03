@@ -24,8 +24,13 @@ namespace Task2.Excel
             while (true)
             {
                 var classCell = GetNext(sheet, startCell, "Класс ");
-                if (classCell!.ToString()!.Contains("Баланс",StringComparison.OrdinalIgnoreCase)) break;
-                parsedFile.BankClasses.Add( ParseBankClassXLS(classCell));
+                if (classCell!.ToString()!.Contains("Баланс", StringComparison.OrdinalIgnoreCase))
+                {
+                    parsedFile.BankClasses.Last().BankRows.Add(ParseBankRowXLS(classCell.Row, true, false, true));
+                    break;
+
+                }
+                parsedFile.BankClasses.Add(ParseBankClassXLS(classCell));
                 startCell = classCell;
             }
 
@@ -33,17 +38,18 @@ namespace Task2.Excel
 
         }
 
-        private static ParsedBankRow ParseBankRowXLS(IRow row)
+        private static ParsedBankRow ParseBankRowXLS(IRow row, bool isSum = false, bool isClassSum = false, bool isGlobalSum = false)
         {
             var parsedBankRow = new ParsedBankRow()
             {
-                AccountNumber = row.GetCell(0).ToString()!,
+                AccountNumber = isClassSum ? "ПО КЛАССУ" : isGlobalSum ? "БАЛАНС" : row.GetCell(0).ToString()!,
                 OpeningBalanceActive = (decimal)row.GetCell(1).NumericCellValue,
                 OpeningBalancePassive = (decimal)row.GetCell(2).NumericCellValue,
                 TurnoverDebit = (decimal)row.GetCell(3).NumericCellValue,
                 TurnoverCredit = (decimal)row.GetCell(4).NumericCellValue,
-                ClosingBalanceActive= (decimal)row.GetCell(5).NumericCellValue,
+                ClosingBalanceActive = (decimal)row.GetCell(5).NumericCellValue,
                 ClosingBalancePassive = (decimal)row.GetCell(6).NumericCellValue,
+                IsSum = isSum
             };
 
             return parsedBankRow;
@@ -54,15 +60,30 @@ namespace Task2.Excel
 
             var parsedBankClass = new ParsedBankClass()
             {
-                ClassName = startCell.ToString()
+                ClassName = startCell.ToString()!
             };
             do
             {
                 startCell = startCell.Sheet.GetRow(startCell.RowIndex + 1).GetCell(startCell.ColumnIndex);
+                if (startCell is null || startCell.ToString() is null) break;
                 if (startCell.CellStyle.GetFont(startCell.Sheet.Workbook).IsBold)
-                    continue;
-                parsedBankClass.BankRows.Add(ParseBankRowXLS(startCell.Row));
-            } while (startCell is not null && !startCell.ToString()!.Contains("ПО КЛАССУ"));
+                {
+                    if (startCell.ToString()!.Contains("По классу", StringComparison.OrdinalIgnoreCase))
+                    {
+                        parsedBankClass.BankRows.Add(ParseBankRowXLS(startCell.Row, true, true));
+                        break;
+                    }
+                    else
+                    {
+                        parsedBankClass.BankRows.Add(ParseBankRowXLS(startCell.Row, true));
+                    }
+                }
+                else
+                {
+                    parsedBankClass.BankRows.Add(ParseBankRowXLS(startCell.Row));
+                }
+              
+            } while (startCell is not null);
 
             return parsedBankClass;
         }

@@ -51,7 +51,8 @@ namespace Task2.Excel
                             OpeningBalancePassive = row.OpeningBalancePassive,
                             TurnoverCredit = row.TurnoverCredit,
                             TurnoverDebit = row.TurnoverDebit,
-                            File = file
+                            File = file,
+                            IsSum = row.IsSum,
                         });
                     }
 
@@ -91,15 +92,65 @@ namespace Task2.Excel
             }
         }
 
-        public void GetFile(int fileId)
+        public async Task<ExcelFileDTO?> GetFile(int fileId)
         {
             try
             {
+                var fileData = await db.BankAccounts
+                    .Where(b => b.FileId == fileId)
+                    .Include(b => b.BankClass)
+                    .Include(b => b.Bank)
+                    .GroupBy(b => b.BankClass!.Name)
+                    .ToListAsync();
 
+                if (fileData is null) return null;
+
+                var excelFile = new ExcelFileDTO()
+                {
+                    BankName = fileData.FirstOrDefault()!.FirstOrDefault()!.Bank!.Name,
+                };
+                
+                foreach (var bankClass in fileData)
+                {
+                    var newBankClass = new ExcelBankClassDTO()
+                    {
+                        ClassName = bankClass.Key
+                    };
+                  
+                    foreach (var item in bankClass)
+                    {
+                        var currentRow = new ExcelRowDTO()
+                        {
+                            AccountNumber = item.AccountNumber,
+                            ClosingBalanceActive = item.ClosingBalanceActive,
+                            ClosingBalancePassive = item.ClosingBalancePassive,
+                            OpeningBalanceActive = item.OpeningBalanceActive,
+                            OpeningBalancePassive = item.OpeningBalancePassive,
+                            TurnoverCredit = item.TurnoverCredit,
+                            TurnoverDebit = item.TurnoverDebit,
+                            IsSum = item.IsSum,
+                        };
+                        if (currentRow.AccountNumber.Contains("ПО КЛАССУ", StringComparison.OrdinalIgnoreCase))
+                            newBankClass.ClassSum = currentRow;
+                        else if (currentRow.AccountNumber.Contains("БАЛАНС", StringComparison.OrdinalIgnoreCase))
+                        {
+                            excelFile.FileSum = currentRow;
+                        }else
+                        {
+                            newBankClass.Rows.Add(currentRow);
+                        }
+
+
+
+                    }
+                    excelFile.BankClasses.Add(newBankClass);
+                }
+                return excelFile;
             }
             catch (Exception ex)
             {
                 logger.LogError("Exception was occured during file getting with message: {ex}", ex.Message);
+                return null;
             }
         }
     }

@@ -16,6 +16,7 @@
         public File? File { get; set; }
         public int BankClassId { get; set; }
         public BankClass? BankClass { get; set; }
+        public bool IsSum { get; set; }
 
     }
 }

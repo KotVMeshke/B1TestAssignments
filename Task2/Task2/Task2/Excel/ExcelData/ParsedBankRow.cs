@@ -9,5 +9,6 @@
         public decimal TurnoverCredit { get; set; }
         public decimal ClosingBalanceActive { get; set; }
         public decimal ClosingBalancePassive { get; set; }
+        public bool IsSum { get; set; }
     }
 }

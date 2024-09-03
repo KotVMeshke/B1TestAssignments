@@ -36,7 +36,7 @@
 
         th, td {
             padding: 8px;
-            text-align: left;
+            text-align: center;
         }
     </style>
 </head>
@@ -55,10 +55,27 @@
         <div id="files"></div>
     </div>
 
+    <h2>Data</h2>
+
     <div id="dataView">
-        <h2>Data</h2>
+        <div id="bankName">
+        </div>
         <table id="dataTable">
-            <thead></thead>
+            <thead>
+                <tr>
+                    <td rowspan="2">Б/сч</td>
+                    <td colspan="2">Входящее сальдо</td>
+                    <td colspan="2">Обороты</td>
+                    <td colspan="2">Исходящее сальдо</td>
+                </tr>
+                <tr>
+                    <td>Актив</td>
+                    <td>Пассив</td>
+                    <td>Дебет</td>
+                    <td>Кредит</td>
+                    <td>Актив</td>
+                    <td>Пассив</td>
+                </tr>
             <tbody></tbody>
         </table>
     </div>
@@ -92,9 +109,9 @@
                         li.textContent = `${file.name}`;
 
                         const button = document.createElement('button');
-                        button.textContent = "Show ID";
+                        button.textContent = "Show file data";
                         button.className = 'file-button';
-                        button.addEventListener('click', () => alert(`File ID: ${file.id}`));
+                        button.addEventListener('click', viewFileData(file.id));
 
                         li.appendChild(button);
                         ul.appendChild(li);
@@ -107,7 +124,61 @@
             fetch(`/excel/files/${fileId}`)
                 .then(response => response.json())
                 .then(data => {
-                   
+                    console.log(data);
+                    var textNode = document.createTextNode(data.bankName);
+                    document.getElementById("bankName").appendChild(textNode);
+                    const tbody = document.querySelector('#dataTable tbody');
+                    data.bankClasses.forEach(bankClass => {
+                        const classTr = document.createElement('tr');
+                        classTr.classList.add('class-name');
+                        classTr.innerHTML = `<td colspan="8">${bankClass.className}</td>`;
+                        tbody.appendChild(classTr);
+                        bankClass.rows.forEach(row => {
+                            const tr = document.createElement('tr');
+                            if (row.isSum) tr.style.fontWeight = 'bold';
+                            tr.innerHTML = `
+                                    <td>${row.accountNumber}</td>
+                                    <td>${row.openingBalanceActive.toFixed(2)}</td>
+                                    <td>${row.openingBalancePassive.toFixed(2)}</td>
+                                    <td>${row.turnoverDebit.toFixed(2)}</td>
+                                    <td>${row.turnoverCredit.toFixed(2)}</td>
+                                    <td>${row.closingBalanceActive.toFixed(2)}</td>
+                                    <td>${row.closingBalancePassive.toFixed(2)}</td>
+                                `;
+                            tbody.appendChild(tr);
+                        });
+                        const tr = document.createElement('tr');
+                        classTr.classList.add('class-sum');
+                        tr.style.fontWeight = 'bold';
+                        tr.innerHTML = `
+                                    <td>${bankClass.classSum.accountNumber}</td>
+                                    <td>${bankClass.classSum.openingBalanceActive.toFixed(2)}</td>
+                                    <td>${bankClass.classSum.openingBalancePassive.toFixed(2)}</td>
+                                    <td>${bankClass.classSum.turnoverDebit.toFixed(2)}</td>
+                                    <td>${bankClass.classSum.turnoverCredit.toFixed(2)}</td>
+                                    <td>${bankClass.classSum.closingBalanceActive.toFixed(2)}</td>
+                                    <td>${bankClass.classSum.closingBalancePassive.toFixed(2)}</td>
+                                    `;
+
+                        tbody.appendChild(tr);
+
+                    });
+
+                    const tr = document.createElement('tr');
+                    tbody.classList.add('file-sum');
+                    tr.style.fontWeight = 'bold';
+                    tr.innerHTML = `
+                            <td>${data.fileSum.accountNumber}</td>
+                            <td>${data.fileSum.openingBalanceActive.toFixed(2)}</td>
+                            <td>${data.fileSum.openingBalancePassive.toFixed(2)}</td>
+                            <td>${data.fileSum.turnoverDebit.toFixed(2)}</td>
+                            <td>${data.fileSum.turnoverCredit.toFixed(2)}</td>
+                            <td>${data.fileSum.closingBalanceActive.toFixed(2)}</td>
+                            <td>${data.fileSum.closingBalancePassive.toFixed(2)}</td>
+                            `;
+
+                    tbody.appendChild(tr);
+
                 });
         }
 

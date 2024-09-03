@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Task2.DataBase;
 using Task2.Excel;
 
@@ -24,8 +25,10 @@ app.MapGet("/excel/files", async ([FromServices] ExcelService service) =>
     return files is not null ? Results.Ok(files) : Results.Problem("Files weren't found");
 });
 
-app.MapGet("/excel/files/{fileId:int}", async (int fileId) =>
+app.MapGet("/excel/files/{fileId:int}", async ([FromServices] ExcelService service, int fileId) =>
 {
-    return Results.Problem("Not implemented");
+    var file = await service.GetFile(fileId);
+    return file is not null ? Results.Ok(file) : Results.Problem("File wasn't found");
+
 });
 app.Run();

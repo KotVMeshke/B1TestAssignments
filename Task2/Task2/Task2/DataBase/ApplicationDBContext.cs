@@ -10,7 +10,7 @@ namespace Task2.DataBase
         public DbSet<BankAccount> BankAccounts { get; set; } = null!;
         public DbSet<BankClass> BankClasses { get; set; } = null!;
         public DbSet<Entity.File> Files { get; set; } = null!;
-        public ApplicationDBContext() {  Database.EnsureCreated(); }
+        public ApplicationDBContext() { Database.EnsureCreated(); }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -108,6 +108,9 @@ namespace Task2.DataBase
                 b.Property(e => e.ClosingBalancePassive)
                     .HasColumnType("decimal(18,2)")
                     .HasColumnName("bc_closing_balannce_passive");
+
+                b.Property(e => e.IsSum)
+                    .HasColumnName("bc_is_sum");
 
                 b.HasOne(e => e.Bank)
                     .WithMany(b => b.BankAccounts) 
