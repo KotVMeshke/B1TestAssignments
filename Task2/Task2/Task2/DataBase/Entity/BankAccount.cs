@@ -1,5 +1,8 @@
 ﻿namespace Task2.DataBase.Entity
 {
+    /// <summary>
+    /// Represents a bank row entity.
+    /// </summary>
     public class BankAccount
     {
         public int Id { get; set; }

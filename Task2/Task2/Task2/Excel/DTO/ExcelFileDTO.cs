@@ -1,5 +1,8 @@
 ﻿namespace Task2.Excel.DTO
 {
+    /// <summary>
+    /// Data Transfer Object (DTO) for representing a excel file.
+    /// </summary>
     public class ExcelFileDTO
     {
         public string BankName { get; set; } = "";

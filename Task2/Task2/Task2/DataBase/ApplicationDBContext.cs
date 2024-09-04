@@ -3,6 +3,9 @@ using Task2.DataBase.Entity;
 
 namespace Task2.DataBase
 {
+    /// <summary>
+    /// Represents the application's database context, which includes the DbSet properties for accessing and managing entities in the database.
+    /// </summary>
     public class ApplicationDBContext : DbContext
     {
 
@@ -12,11 +15,12 @@ namespace Task2.DataBase
         public DbSet<Entity.File> Files { get; set; } = null!;
         public ApplicationDBContext() { Database.EnsureCreated(); }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=localhost; Database=test_task2;Trusted_Connection=true;Encrypt=False");
-        }
+        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options) { Database.EnsureCreated(); }
 
+        /// <summary>
+        /// Configures the model relationships and table mappings for the entities in the database.
+        /// </summary>
+        /// <param name="modelBuilder">The model builder to configure the model.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Bank>(b =>

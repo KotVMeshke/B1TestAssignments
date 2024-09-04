@@ -1,5 +1,8 @@
 ﻿namespace Task2.Excel.DTO
 {
+    /// <summary>
+    /// Data Transfer Object (DTO) for representing a row in bank class.
+    /// </summary>
     public class ExcelRowDTO
     {
         public string AccountNumber { get; set; } = "";
@@ -11,14 +14,5 @@
         public decimal ClosingBalancePassive { get; set; }
         public bool IsSum { get; set; }
 
-        public void AddRow(ExcelRowDTO row)
-        {
-            OpeningBalanceActive += row.OpeningBalanceActive;
-            OpeningBalancePassive += row.OpeningBalancePassive;
-            TurnoverDebit += row.TurnoverDebit;
-            TurnoverCredit += row.TurnoverCredit;
-            ClosingBalanceActive += row.ClosingBalanceActive;
-            ClosingBalancePassive += row.ClosingBalancePassive;
-        }
     }
 }
